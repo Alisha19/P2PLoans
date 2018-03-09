@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block title %}Applicant Dashboard{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+    <header id="header" class="alt">
+	<span class="logo"><a href="{{url_for('main')}}"><img src="../static/res/p2p_logo.png" alt="" /></a></span>
+	</header>
+
+	<div id="wrapper">
+
+		<!-- Nav -->
+		<nav id="nav" class="nav nav-pills justify-content-center">
+			<ul id="myTab">
+				<li class="nav-item"><a style="color: #636363" class="nav-link" href="#my_loans">My Loans</a></li>
+				<li class="nav-item"><a style="color: #636363" class="nav-link" href="#new_app">New Application</a></li>
+				<li class="nav-item"><a style="color: #636363" class="nav-link" href="#">Logout</a></li>
+			</ul>
+		</nav>
+
+		<div id="main">
+			<section id="content" class="main">
+				<div class="container">
+					<div class="tab-content">
+						<div class="tab-pane" id="my_loans" role="tabpanel">
+							{% for i in range(ndecks) %}
+						   	<div class="card-deck mb-3 text-center">
+						         {% for app in apps[i*3 : i*3+3] %}
+										<div class="card mb-4 box-shadow">
+											{% if app[6] == 0 %}
+												<div class="card-header" style="background-color: #F1948A">
+													<h4 class="my-0 font-weight-normal">{{app[7]}}%</h4>
+								          	</div>
+											{% elif app[6] == 1 %}
+												<div class="card-header" style="background-color: #F9E79F">
+													<h4 class="my-0 font-weight-normal">{{app[7]}}%</h4>
+								          	</div>
+											{% else %}
+												<div class="card-header" style="background-color: #ABEBC6">
+													<h4 class="my-0 font-weight-normal">{{app[7]}}%</h4>
+								          	</div>
+											{% endif %}
+							          	<div class="card-body">
+								            <h1 class="card-title pricing-card-title">&#8377; {{app[2]}}</h1>
+								            <ul class="list-unstyled mt-3 mb-4">
+								            	<li>{{app[1]}}</li>
+								            	<li>{{app[3]}}</li>
+								            	<li>{{app[4]}} years old</li>
+								            	<li>{{app[5]}}</li>
+								            </ul>
+								            <button type="button" class="btn btn-lg btn-block button special">View Application</button>
+							         	</div>
+								      </div>
+									{% endfor %}
+
+									{% if i == (ndecks-1) %}
+						      		{% for i in range(to_hide) %}
+											<div class="card mb-4 box-shadow hidden-xs-up" style="opacity: 0">
+												<div class="card-header" style="background-color: #ABEBC6">
+													<h4 class="my-0 font-weight-normal">nope</h4>
+								          	</div>
+								          	<div class="card-body">
+									            <h1 class="card-title pricing-card-title">&#8377; no</h1>
+									            <ul class="list-unstyled mt-3 mb-4">
+									            	<li>more</li>
+									            	<li>shit</li>
+									            	<li>for</li>
+									            	<li>you</li>
+									            </ul>
+								          	</div>
+								      	</div>							    	
+										{% endfor %}
+						      	{% endif %}
+						      </div>
+						   {% endfor %}
+						</div>
+
+					  	<div class="tab-pane" id="new_app" role="tabpanel">
+					  		<form method="post" action="">
+					  			<h2>Start a new application</h2>
+					  			<div class="row uniform">
+					  				<div class="4u 12u$(xsmall)">
+										<input type="text" name="name" id="name" value="{{request.form.name}}" placeholder="Name" required />
+										<label for="name">Name</label>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<input type="number" name="age" id="age" value="{{request.form.age}}" placeholder="Age" required />
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="job" id="job" required>
+												<option value="">Job</option>
+												<option value="1">Unemployed/ Unskilled - non-resident</option>
+												<option value="2">Unskilled - resident</option>
+												<option value="3">Skilled employee / Official</option>
+												<option value="4">Management</option>
+												<option value="4">Self-employed</option>
+												<option value="4">Highly qualified employee</option>
+												<option value="4">Officer</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="2u 12u$(small)">
+										<input type="radio" id="male" name="gender" value="0" checked>
+										<label for="male">Male</label>
+									</div>
+									<div class="2u 12u$(small)">
+										<input type="radio" id="female" value="1" name="gender">
+										<label for="female">Female</label>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="marr_status" id="marr_status" required>
+												<option value="">Marriage Status</option>
+												<option value="1">Married</option>
+												<option value="2">Single</option>
+												<option value="3">Divorced/ Separated</option>
+												<option value="4">Widowed</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<input type="number" name="liab" id="liab" value="{{request.form.liab}}" placeholder="Liable for how many" required />
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="housing" id="housing" required>
+												<option value="">Housing</option>
+												<option value="1">Rent</option>
+												<option value="2">Own</option>
+												<option value="3">For free</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<input type="number" name="res_since" id="res_since" value="{{request.form.res_since}}" placeholder="Present residence since" required />
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="status_ca" id="status_ca" required>
+												<option value="">Status of checking account</option>
+												<option value="1">Less than 0</option>
+												<option value="2">Between 0 and 200</option>
+												<option value="3">More than 200</option>
+												<option value="4">No checking account</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<input type="number" name="duration" id="duration" value="{{request.form.duration}}" placeholder="Duration (in months)" required />
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="purpose" id="purpose" required>
+												<option value="">Purpose</option>
+												<option value="1">Car (new)</option>
+												<option value="2">Car (used)</option>
+												<option value="3">Furniture/ Equipment</option>
+												<option value="4">Radio/ Television</option>
+												<option value="5">Domestic appliances</option>
+												<option value="6">Repairs</option>
+												<option value="7">Education</option>
+												<option value="8">Vacation</option>
+												<option value="9">Retraining</option>
+												<option value="10">Business</option>
+												<option value="11">Others</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<input type="number" name="cred_amt" id="cred_amt" value="{{request.form.cred_amt}}" placeholder="Credit amount" required />
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="sav_act" id="sav_act" required>
+												<option value="">Savings account/ bonds</option>
+												<option value="1">Less than 100</option>
+												<option value="2">Between 100 and 500</option>
+												<option value="3">Between 500 and 1000</option>
+												<option value="4">More than 1000</option>
+												<option value="5">Unknown/ No savings account</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="emp_since" id="emp_since" required>
+												<option value="">Present employment since</option>		
+												<option value="1">Unemployed</option>
+												<option value="2">Less than 1 year</option>
+												<option value="3">Between 1 and 4 years</option>
+												<option value="4">Between 4 and 7 years</option>
+												<option value="5">More than 7 years</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<input type="number" name="inst_rate" id="inst_rate" value="{{request.form.inst_rate}}" placeholder="Installment rate" required />
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="debtors" id="debtors" required>
+												<option value="">Other debtors/ guarantors</option>
+												<option value="1">None</option>
+												<option value="2">Co-applicant</option>
+												<option value="3">Guarantor</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="property" id="property" required>
+												<option value="">Property</option>
+												<option value="1">Real estate</option>
+												<option value="2">Life Insurance</option>
+												<option value="3">Car or other</option>
+												<option value="4">Unknown/ No property</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="plans" id="plans" required>
+												<option value="">Other installment plans</option>
+												<option value="1">Bank</option>
+												<option value="2">Stores</option>
+												<option value="3">None</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<input type="number" name="exist_cred" id="exist_cred" value="{{request.form.exist_cred}}" placeholder="Existing credits here" required />
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="phone" id="phone" required>
+												<option value="">Telephone</option>
+												<option value="1">Yes, under my name</option>
+												<option value="2">No</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="4u 12u$(xsmall)">
+										<div class="select-wrapper">
+											<select name="foreign" id="foreign" required>
+												<option value="">Foreign worker</option>
+												<option value="1">Yes</option>
+												<option value="2">No</option>
+											</select>
+										</div>
+									</div>
+
+									<footer class="major">
+										<ul class="actions">
+											<li><input type="submit" name="submit" value="Submit" class="special" /></li>
+										</ul>
+									</footer>
+
+					  			</div>
+					  		</form>
+					  	</div>
+
+					</div>
+				</div>
+			</section>
+		</div>
+		{% include "footer.html" %}
+	</div>
+{% endblock %}
+
+{% block footer %}
+	<script type="text/javascript">
+    $('#myTab a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+  	})
+
+  	$('#myTab a[href="#new_app"]').tab('show');
+  </script>
+{% endblock %}

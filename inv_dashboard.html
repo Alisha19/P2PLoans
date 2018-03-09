@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Investor Dashboard{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+  <header id="header" class="alt">
+	<span class="logo"><a href="{{url_for('main')}}"><img src="../static/res/p2p_logo.png" alt="" /></a></span>
+	</header>
+
+	<div id="wrapper">
+
+	<!-- Nav -->
+	<nav id="nav" class="nav nav-pills justify-content-center">
+		<ul id="myTab">
+			<li class="nav-item"><a style="color: #636363" class="nav-link" href="#profile">Profile</a></li>
+			<li class="nav-item"><a style="color: #636363" class="nav-link" href="#my_inv">My Investments</a></li>
+			<li class="nav-item"><a style="color: #636363" class="nav-link" href="#open_apps">Open Applications</a></li>
+			<li class="nav-item"><a style="color: #636363" class="nav-link" href="#">Logout</a></li>
+		</ul>
+	</nav>
+
+		<div id="main">
+			<section id="content" class="main">
+				<div class="container">
+					<div class="tab-content">
+
+						<div class="tab-pane" id="profile" role="tabpanel">
+					  	<form action="/deposit/" method="post">
+					  		<input type="number" name="deposit_amt" id="deposit_amt" value="{{request.form.deposit_amt}}" placeholder="Deposit" />
+							  <button name="deposit" type="submit">Deposit</button>
+							</form>
+							<p>{{success}}</p>
+					  </div>
+
+						<div class="tab-pane" id="my_inv" role="tabpanel">
+					  	{% include "my_inv.html" %}
+					  </div>
+
+						<div class="tab-pane" id="open_apps" role="tabpanel">
+							{% for i in range(ndecks) %}
+					      <div class="card-deck mb-3 text-center">
+					        {% for app in apps[i*3 : i*3+3] %}
+										<div class="card mb-4 box-shadow">
+											{% if app['category'] == 0 %}
+												<div class="card-header" style="background-color: #F1948A">
+													<h4 class="my-0 font-weight-normal">{{app['confidence']}}%</h4>
+							          </div>
+											{% elif app['category'] == 1 %}
+												<div class="card-header" style="background-color: #F9E79F">
+													<h4 class="my-0 font-weight-normal">{{app['confidence']}}%</h4>
+							          </div>
+											{% else %}
+												<div class="card-header" style="background-color: #ABEBC6">
+													<h4 class="my-0 font-weight-normal">{{app['confidence']}}%</h4>
+							          </div>
+											{% endif %}
+						          <div class="card-body">
+						            <h1 class="card-title pricing-card-title">&#8377; {{app['amount']}}</h1>
+						            <ul class="list-unstyled mt-3 mb-4">
+						              <li>{{app['name']}}</li>
+						              <li>{{app['purpose']}}</li>
+						              <li>{{app['age']}} years old</li>
+						              <li>{{app['job']}}</li>
+						            </ul>
+						            <button type="button" class="btn btn-lg btn-block button special">
+						            	<a href="{{url_for('view_app', app_id = app['application_id'])}}" class="button special" style="text-decoration:none">View Application</a>
+						            </button>
+						          </div>
+							      </div>
+									{% endfor %}
+
+									{% if i == (ndecks-1) %}
+						      	{% for i in range(to_hide) %}
+						      		
+											<div class="card mb-4 box-shadow hidden-xs-up" style="opacity: 0">
+												<div class="card-header" style="background-color: #ABEBC6">
+													<h4 class="my-0 font-weight-normal">nope</h4>
+							          </div>
+							          <div class="card-body">
+							            <h1 class="card-title pricing-card-title">&#8377; no</h1>
+							            <ul class="list-unstyled mt-3 mb-4">
+							              <li>more</li>
+							              <li>shit</li>
+							              <li>for</li>
+							              <li>you</li>
+							            </ul>
+							          </div>
+								      </div>
+								    	
+										{% endfor %}
+						      {% endif %}
+					      </div>
+					    {% endfor %}
+					  </div>
+
+				  </div>
+				</div>
+			</section>
+		</div>
+		{% include "footer.html" %}
+	</div>
+{% endblock %}
+
+{% block footer %}
+	<script type="text/javascript">
+    $('#myTab a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+  	})
+
+  	$('#myTab a[href="#open_apps"]').tab('show');
+  </script>
+{% endblock %}
